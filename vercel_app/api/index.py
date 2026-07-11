@@ -15,16 +15,15 @@ df = pd.read_csv(csv_path)
 if 'CATEGORY' not in df.columns:
     df["CATEGORY"] = np.where(df["PRODUCTION_TON"] > 80000, "High Production", "Normal Production")
 
-# Vercel requires WSGI application server
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY], title="Agricultural Dashboard")
-server = app.server
+# VERCEL FIX: The Flask instance must be named 'app' for Vercel to find the WSGI server
+dash_app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY], title="Agricultural Dashboard")
+app = dash_app.server # <--- Vercel looks for 'app', so we assign the Flask server to 'app'
 
 theme_switch = ThemeSwitchAIO(
     aio_id="theme", 
     themes=[dbc.themes.MINTY, dbc.themes.CYBORG]
 )
 
-# Tab 1: Analytics Dashboard Layout (Data Entry tab removed for static hosting)
 analytics_layout = html.Div([
     dbc.Row([
         dbc.Col([
@@ -54,7 +53,7 @@ analytics_layout = html.Div([
     ], className="mb-5")
 ])
 
-app.layout = dbc.Container([
+dash_app.layout = dbc.Container([
     # Header Section
     dbc.Row([
         dbc.Col(
@@ -75,7 +74,7 @@ app.layout = dbc.Container([
 ], fluid=True, className="pb-5", style={"minHeight": "100vh"})
 
 
-@app.callback(
+@dash_app.callback(
     [Output('metrics-cards', 'children'),
      Output('production-bar', 'figure'),
      Output('yield-histogram', 'figure'),
