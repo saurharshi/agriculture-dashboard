@@ -57,7 +57,7 @@ dash_app.layout = dbc.Container([
     # Header Section
     dbc.Row([
         dbc.Col(
-            html.Img(src="/assets/logo.png", height="80px", className="mb-2"),
+            html.Img(src="https://raw.githubusercontent.com/saurharshi/agriculture-dashboard/main/vercel_app/assets/logo.png", height="80px", className="mb-2"),
             width="auto", className="d-flex align-items-center"
         ),
         dbc.Col([
